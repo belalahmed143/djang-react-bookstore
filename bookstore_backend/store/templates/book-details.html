@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-fluid my-5">
+        <h2>Book Details</h2>
+        <div class="card shadow-lg">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="{{ book.image.url }}" class="card-img-top" alt="...">
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.name }}</h5>
+                        <div class="mb-4">
+                            {% if book.discount_price %}
+                            <span class="fw-bold fs-5">৳{{ book.discount_price }} </span>
+                            <span ><del>৳{{ book.price }} </del></span>
+                            {% else %}
+                            <span class="fw-bold fs-6">৳{{ book.price }} </span>
+                            {% endif %}
+                        </div>
+                        {% if book.stock_quantity %}
+                        {% if book.discount_price %}
+                        <span class="p-1 fs-4"  style="background-color: #eb5525; color:#fff">{{ book.saving_percent|floatformat:"0" }}% Off</span>
+                        {% endif %}
+                        {% else %}
+                        <span class="product-label label-sale" style="background-color: #e70f0f; color:#fff">out of stock</span>
+                        {% endif %}
+                        <br>
+                        <a href="{% url 'add-to-cart' book.pk  %}" class="btn btn-primary my-3">Add To Cart</a>
+                      </div>                 
+                </div>
+            </div>
+            <p class="card-text">{{ book.discription|safe }}</p>
+          </div> 
+    </div>
+{% endblock content %}

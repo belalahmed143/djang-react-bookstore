@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-fluid my-5">
+        <h3>Best For You</h3>
+        <div class="row">          
+            {% for c in books %}
+                <div class="col-6 col-md-4 col-lg-3 my-2 d-flex align-items-stretch">
+                    
+                    <div class="card shadow-lg">
+                        <a href="{% url 'book-detail' c.pk %}"><img src="{{ c.image.url }}" class="card-img-top" alt="..."></a>
+                        <div class="card-body">
+                            <a href="{% url 'book-detail' c.pk %}"><h5 class="card-title">{{ c.name }}</h5></a>
+                            
+                            {% if c.discount_price %}
+                            <span class="new-price">৳{{ c.discount_price }} </span>
+                            <span class="old-price"><del>৳{{ c.price }} </del></span>
+                            {% else %}
+                            ৳{{ c.price }} 
+                            {% endif %}
+
+                            {% if c.stock_quantity %}
+                            {% if c.discount_price %}
+                            <span >{{ c.saving_percent|floatformat:"0" }}% Off</span>
+                            {% endif %}
+                            {% else %}
+                            <span style="background-color: #e70f0f; color:#fff">out of stock</span>
+                            {% endif %}
+                          <p class="card-text">{{ c.discription|truncatechars_html:100|safe }}</p>
+                        </div>
+                        <div class="text-center mb-3">
+                            <a href="{% url 'book-detail' c.pk %}" class="btn btn-primary">View</a>
+                          </div>
+                      </div> 
+                </div>
+            {% endfor %}          
+        </div>
+    </div>
+{% endblock content %}

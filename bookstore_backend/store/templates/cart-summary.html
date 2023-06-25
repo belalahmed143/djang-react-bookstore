@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Cart Summary</h3>
+{% if order.books.all %}
+<div class="row">
+    <div class="col-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for p in order.books.all %}
+            <tr>
+                <td>
+                    <div>
+                        <a href="{% url 'book-detail' p.book.pk %}">
+                            <img src="{{ p.book.image.url }}" alt="book image" style="width: 100px;">
+                        </a>
+
+                        <h5 >
+                            <a href="{% url 'book-detail' p.book.pk %}">{{ p.book.name }}</a>
+                        </h5><!-- End .product-title -->
+                    </div><!-- End .product -->
+                </td>
+
+                    <td style="color:rgb(0 0 0);">
+                        {% if p.book.discount_price %}
+                        ৳{{ p.book.discount_price }} 
+                        {% else %}
+                        ৳{{ p.book.price }} 
+                        {% endif %}	
+                    </td>	
+                    <td>
+                        <div>
+                            <a style="font-size: 15px;" href="{% url 'quantity-decrement' p.book.pk %}">-</i></a>
+                            <p>{{ p.quantity }}</p>
+                            <a style="font-size: 15px;" href="{% url 'quantity-increment' p.book.pk %}">+</i></a>
+                        </div><!-- End .cart-product-quantity -->
+                    </td> 								
+                    <td style="color:rgb(0 0 0);">৳{{ p.get_subtotal }} <span>
+                         {% if p.book.discount_price %}
+                          saving(৳{{ p.saving_price }} )<br>{{ p.saving_percent|floatformat:"2" }}% 
+                         {% endif %}</span></td>  
+                    <td><a class="btn btn-danger" href="{% url 'remove_from_cart' p.book.pk %}" >Remove</a></td>
+            </tr>                                        
+            {% endfor %}
+
+
+            </tbody>
+        </table><!-- End .table table-wishlist -->
+
+    </div><!-- End .col-lg-9 -->
+    <table class="table bg-dark text-white text-center">
+        <tbody>											
+            <tr class="">
+                <td>Total book Price:</td>
+                <td>৳{{ order.get_total }} </td>
+            </tr>
+        </tbody>
+    </table><!-- End .table table-summary -->
+</div><!-- End .row -->
+{% else %}
+<h2 class="text-center text-warning">Empty Cart</h2>
+{% endif %}
+{% endblock content %}
